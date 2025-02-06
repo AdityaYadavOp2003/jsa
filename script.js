@@ -500,15 +500,13 @@ const countdownEl = document.getElementById('countdown');
 const modal = document.getElementById('problemModal');
 const modalContent = document.getElementById('modalContent');
 
-// Hackathon start and end times
-const startTime = new Date('2025-02-07T04:42:00').getTime(); 
-const endTime = new Date('2025-02-08T04:44:00').getTime(); 
 
+// Render problems by category
 function renderProblems(category = 'all') {
     problemGrid.innerHTML = '';
 
     if (category === 'all') {
-       
+        // Render all problems in unsorted form
         const allProblemsSection = document.createElement('div');
         allProblemsSection.className = 'category-section';
         allProblemsSection.innerHTML = `
@@ -531,6 +529,7 @@ function renderProblems(category = 'all') {
 
         problemGrid.appendChild(allProblemsSection);
     } else {
+        // Render problems grouped by category
         const categories = {};
         problems.forEach(problem => {
             if (!categories[problem.category]) {
@@ -539,16 +538,19 @@ function renderProblems(category = 'all') {
             categories[problem.category].push(problem);
         });
 
+        // Render each category section
         for (const [categoryName, categoryProblems] of Object.entries(categories)) {
             if (category !== categoryName.toLowerCase().trim()) continue;
 
+            // Create category section
             const categorySection = document.createElement('div');
             categorySection.className = 'category-section';
             categorySection.innerHTML = `
-                <h2 class="category-title">${categoryName.toUpperCase().trim()}</h2>
+                <h2 class="category-title"></h2>
                 <div class="category-problems"></div>
             `;
 
+            // Render problems for this category
             const categoryProblemsContainer = categorySection.querySelector('.category-problems');
             categoryProblems.forEach((problem, index) => {
                 const card = document.createElement('div');
@@ -596,10 +598,12 @@ function showProblem(index) {
     modal.style.display = 'block';
 }
 
+// Close modal
 function closeModal() {
     modal.style.display = 'none';
 }
 
+// Filter buttons
 document.querySelectorAll('.filter-btn').forEach(button => {
     button.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(btn => 
@@ -609,6 +613,11 @@ document.querySelectorAll('.filter-btn').forEach(button => {
     });
 });
 
+// Countdown Timer
+const startTime = new Date('2025-02-07T10:30:00').getTime(); // Hackathon start time
+const endTime = new Date('2025-02-07T05:30:00').getTime(); // Hackathon end time (24 hours later)
+
+
 function updateCountdown() {
     const now = new Date().getTime();
     let message = "";
@@ -616,15 +625,12 @@ function updateCountdown() {
     if (now < startTime) {
         const diff = startTime - now;
         message = `⏳ Hackathon starts in: ${formatTime(diff)}`;
-        problemGrid.innerHTML = ''; 
     } else if (now >= startTime && now < endTime) {
         const diff = endTime - now;
-        message = `🚀 Hackathon Live! Ends in: ${formatTime(diff)}`;
-        renderProblems(); 
+        message = `🚀 Hackathon Live!
+         Ends in: ${formatTime(diff)}`;
     } else {
-        
         message = "🎉 Hackathon Ended!";
-        problemGrid.innerHTML = ''; 
         clearInterval(timer);
     }
 
@@ -639,9 +645,12 @@ function formatTime(diff) {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
+
+renderProblems();
 updateCountdown();
-const timer = setInterval(updateCountdown, 0);
+const timer = setInterval(updateCountdown, 1000);
+
 
 window.onclick = function(event) {
     if (event.target == modal) closeModal();
-};
+};  

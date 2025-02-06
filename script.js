@@ -501,8 +501,8 @@ const modal = document.getElementById('problemModal');
 const modalContent = document.getElementById('modalContent');
 
 // Hackathon start and end times
-const startTime = new Date('2025-02-07T04:32:00').getTime(); 
-const endTime = new Date('2025-02-08T04:34:00').getTime(); 
+const startTime = new Date('2025-02-07T04:42:00').getTime(); 
+const endTime = new Date('2025-02-08T04:44:00').getTime(); 
 
 function renderProblems(category = 'all') {
     problemGrid.innerHTML = '';

@@ -640,7 +640,7 @@ function formatTime(diff) {
 }
 
 updateCountdown();
-const timer = setInterval(updateCountdown, 1);
+const timer = setInterval(updateCountdown, 0);
 
 window.onclick = function(event) {
     if (event.target == modal) closeModal();

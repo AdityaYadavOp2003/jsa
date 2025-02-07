@@ -305,13 +305,13 @@ const problems = [
     },
     {
         category: 'CyberSecurity',
-        title: 'Secure IoT Device Management',
-        description: 'AI-based security for IoT devices',
+        title: 'Automated system scanning and fake images detection.',
+        description: 'System scanning and fake images',
         details: {
-            difficulty: 'Intermediate',
-            resources: ['Raspberry Pi', 'MQTT', 'TensorFlow'],
-            requirements: 'Device authentication, secure communication',
-            description: 'Create a system that ensures secure communication and management of IoT devices.'
+            difficulty: 'Advanced',
+            resources: ['Gen AI', 'OpenStack', 'Python'],
+            requirements: 'Automated system scanning and fake images detection.',
+            description: 'An integrated security platform that combines AI technology with cybersecurity to detect AI-generated images, perform automated security scans, and generate comprehensive risk assessment reports'
         }
     },
     {

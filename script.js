@@ -491,7 +491,65 @@ const problems = [
             requirements: 'Content ownership, monetization',
             description: 'Create a platform where content creators can share and monetize their work using blockchain.'
         }
+    },
+
+    // Web 2.0 (5 problems)
+    {
+        category: 'web2',
+        title: 'Real-Time Chat Application',
+        description: 'Build a real-time chat application using WebSockets',
+        details: {
+            difficulty: 'Intermediate',
+            resources: ['Node.js', 'Socket.io', 'Express'],
+            requirements: 'Real-time messaging, user authentication',
+            description: 'Develop a chat application that supports real-time messaging and user authentication using WebSockets.'
+        }
+    },
+    {
+        category: 'web2',
+        title: 'E-Commerce Website',
+        description: 'Create a full-featured e-commerce website',
+        details: {
+            difficulty: 'Advanced',
+            resources: ['React', 'Node.js', 'MongoDB'],
+            requirements: 'Product catalog, shopping cart, payment integration',
+            description: 'Build an e-commerce website with features like product catalog, shopping cart, and payment gateway integration.'
+        }
+    },
+    {
+        category: 'web2',
+        title: 'Social Media Platform',
+        description: 'Develop a social media platform with user profiles and posts',
+        details: {
+            difficulty: 'Advanced',
+            resources: ['React', 'Node.js', 'Firebase'],
+            requirements: 'User profiles, posts, likes, comments',
+            description: 'Create a social media platform where users can create profiles, post updates, and interact with others through likes and comments.'
+        }
+    },
+    {
+        category: 'web2',
+        title: 'Online Learning Platform',
+        description: 'Build an online learning platform with courses and quizzes',
+        details: {
+            difficulty: 'Intermediate',
+            resources: ['Vue.js', 'Node.js', 'MySQL'],
+            requirements: 'Course management, user progress tracking, quizzes',
+            description: 'Develop a platform for online learning that includes course management, user progress tracking, and quizzes.'
+        }
+    },
+    {
+        category: 'web2',
+        title: 'Blogging Platform',
+        description: 'Create a blogging platform with user authentication and comments',
+        details: {
+            difficulty: 'Intermediate',
+            resources: ['Django', 'React', 'SQLite'],
+            requirements: 'User authentication, post creation, comments',
+            description: 'Build a blogging platform where users can create accounts, write blog posts, and comment on others\' posts.'
+        }
     }
+
 ];
 
 // DOM Elements
@@ -500,101 +558,71 @@ const countdownEl = document.getElementById('countdown');
 const modal = document.getElementById('problemModal');
 const modalContent = document.getElementById('modalContent');
 
-
 // Render problems by category
 function renderProblems(category = 'all') {
     problemGrid.innerHTML = '';
+    const filteredProblems = category === 'all'
+        ? problems
+        : problems.filter(problem => problem.category.toLowerCase().trim() === category);
 
-    if (category === 'all') {
-        // Render all problems in unsorted form
-        const allProblemsSection = document.createElement('div');
-        allProblemsSection.className = 'category-section';
-        allProblemsSection.innerHTML = `
-            <h2 class="category-title"></h2>
-            <div class="category-problems"></div>
-        `;
-
-        const allProblemsContainer = allProblemsSection.querySelector('.category-problems');
-        problems.forEach((problem, index) => {
-            const card = document.createElement('div');
-            card.className = 'problem-card';
-            card.innerHTML = `
-                <div class="problem-category">${problem.category.toUpperCase().trim()}</div>
-                <h3>${problem.title}</h3>
-                <p>${problem.description}</p>
-            `;
-            card.addEventListener('click', () => showProblem(index));
-            allProblemsContainer.appendChild(card);
-        });
-
-        problemGrid.appendChild(allProblemsSection);
-    } else {
-        // Render problems grouped by category
-        const categories = {};
-        problems.forEach(problem => {
-            if (!categories[problem.category]) {
-                categories[problem.category] = [];
-            }
-            categories[problem.category].push(problem);
-        });
-
-        // Render each category section
-        for (const [categoryName, categoryProblems] of Object.entries(categories)) {
-            if (category !== categoryName.toLowerCase().trim()) continue;
-
-            // Create category section
-            const categorySection = document.createElement('div');
-            categorySection.className = 'category-section';
-            categorySection.innerHTML = `
-                <h2 class="category-title"></h2>
-                <div class="category-problems"></div>
-            `;
-
-            // Render problems for this category
-            const categoryProblemsContainer = categorySection.querySelector('.category-problems');
-            categoryProblems.forEach((problem, index) => {
-                const card = document.createElement('div');
-                card.className = 'problem-card';
-                card.innerHTML = `
-                    <div class="problem-category">${problem.category.toUpperCase().trim()}</div>
-                    <h3>${problem.title}</h3>
-                    <p>${problem.description}</p>
-                `;
-                card.addEventListener('click', () => showProblem(index));
-                categoryProblemsContainer.appendChild(card);
-            });
-
-            problemGrid.appendChild(categorySection);
-        }
+    if (filteredProblems.length === 0) {
+        problemGrid.innerHTML = '<p>No problems available in this category.</p>';
+        return;
     }
+
+    const categorySection = document.createElement('div');
+    categorySection.className = 'category-section';
+    categorySection.innerHTML = `
+        <h2 class="category-title">${category === 'all' ? 'All Problems' : category.toUpperCase()}</h2>
+        <div class="category-problems"></div>
+    `;
+
+    const problemsContainer = categorySection.querySelector('.category-problems');
+
+    filteredProblems.forEach((problem, index) => {
+        const card = document.createElement('div');
+        card.className = 'problem-card';
+        card.innerHTML = `
+            <div class="problem-category">${problem.category.toUpperCase().trim()}</div>
+            <h3>${problem.title}</h3>
+            <p>${problem.description}</p>
+        `;
+        card.addEventListener('click', () => showProblem(problem));
+        problemsContainer.appendChild(card);
+    });
+
+    problemGrid.appendChild(categorySection);
 }
 
-function showProblem(index) {
-    const problem = problems[index];
+function showProblem(problem) {
     modalContent.innerHTML = `
         <div class="problem-category">${problem.category.toUpperCase().trim()}</div>
         <h2>${problem.title}</h2>
         
         <div class="detail-item">
             <h3>📌 Description</h3>
-            <p>${problem.details.description || problem.description}</p>
+            <p>${problem.details?.description || problem.description}</p>
         </div>
 
         <div class="detail-item">
             <h3>⚙️ Requirements</h3>
-            <p>${problem.details.requirements}</p>
+            <p>${problem.details?.requirements || 'No specific requirements.'}</p>
         </div>
 
         <div class="detail-item">
             <h3>📦 Provided Resources</h3>
-            <ul>${problem.details.resources.map(r => `<li>${r}</li>`).join('')}</ul>
+            <ul>${(problem.details?.resources || []).map(r => `<li>${r}</li>`).join('') || '<li>No resources available.</li>'}</ul>
         </div>
 
         <div class="detail-item">
             <h3>📈 Difficulty Level</h3>
-            <p>${problem.details.difficulty}</p>
+            <p>${problem.details?.difficulty || 'Not specified'}</p>
         </div>
+        
+        <button id="closeModal" class="close-modal">Close</button>
     `;
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
     modal.style.display = 'block';
 }
 
@@ -606,29 +634,24 @@ function closeModal() {
 // Filter buttons
 document.querySelectorAll('.filter-btn').forEach(button => {
     button.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(btn => 
-            btn.classList.remove('active'));
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
         renderProblems(button.dataset.category);
     });
 });
 
 // Countdown Timer
-const startTime = new Date('2025-02-07T10:30:00').getTime(); // Hackathon start time
-const endTime = new Date('2025-02-07T05:30:00').getTime(); // Hackathon end time (24 hours later)
-
+const startTime = new Date('2025-02-07T10:30:00').getTime();
+const endTime = new Date('2025-02-08T10:30:00').getTime();
 
 function updateCountdown() {
-    const now = new Date().getTime();
+    const now = Date.now();
     let message = "";
 
     if (now < startTime) {
-        const diff = startTime - now;
-        message = `⏳ Hackathon starts in: ${formatTime(diff)}`;
+        message = `⏳ Hackathon starts in: ${formatTime(startTime - now)}`;
     } else if (now >= startTime && now < endTime) {
-        const diff = endTime - now;
-        message = `🚀 Hackathon Live!
-         Ends in: ${formatTime(diff)}`;
+        message = `🚀 Hackathon Live! Ends in: ${formatTime(endTime - now)}`;
     } else {
         message = "🎉 Hackathon Ended!";
         clearInterval(timer);
@@ -638,19 +661,16 @@ function updateCountdown() {
 }
 
 function formatTime(diff) {
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    return `${hours}h ${minutes}m ${seconds}s`;
 }
-
 
 renderProblems();
 updateCountdown();
 const timer = setInterval(updateCountdown, 1000);
 
-
 window.onclick = function(event) {
-    if (event.target == modal) closeModal();
-};  
+    if (event.target === modal) closeModal();
+};
